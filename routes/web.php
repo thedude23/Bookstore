@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 
-Route::post('books', 'BooksController@store');
+Route::resource('/books', 'BooksController');
 
 
 

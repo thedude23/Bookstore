@@ -3,9 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Book;
 
 class BooksController extends Controller
 {
+    public function __construct()
+    {
+        // $this->middleware('auth')->except(['index']); // second way of setting middleware
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +19,9 @@ class BooksController extends Controller
      */
     public function index()
     {
-        //
+        $books = Book::all();
+
+        return view('index', compact('books'));
     }
 
     /**
@@ -23,7 +31,9 @@ class BooksController extends Controller
      */
     public function create()
     {
-        //
+        $book = new Book();
+
+        return view('admin.create', compact('book'));
     }
 
     /**
@@ -34,7 +44,9 @@ class BooksController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $book = Book::create($this->validateRequest());
+
+        return redirect('/books');
     }
 
     /**
@@ -54,9 +66,9 @@ class BooksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Book $book)
     {
-        //
+        return view('admin.edit', compact('book'));
     }
 
     /**
@@ -66,9 +78,20 @@ class BooksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Book $book)
     {
-        //
+        // $data = request()->validate([
+        //     'author' => 'required',
+        //     'title' => 'required',
+        //     'year' => 'required',
+        //     'quantity' => 'required'
+        // ]);
+
+        // $data = $this->validateRequest();
+        
+        $book->update($this->validateRequest());
+
+        return redirect('/books');
     }
 
     /**
@@ -77,8 +100,22 @@ class BooksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Book $book)
     {
-        //
+        $book->delete();
+
+        return redirect('/books');
+
+        // dd($book);
+    }
+
+    private function validateRequest()
+    {
+        return request()->validate([
+            'author' => 'required',
+            'title' => 'required',
+            'year' => 'required',
+            'quantity' => 'required'
+        ]);
     }
 }
