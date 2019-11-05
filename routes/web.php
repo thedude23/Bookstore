@@ -14,3 +14,12 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::post('books', 'BooksController@store');
+
+
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
