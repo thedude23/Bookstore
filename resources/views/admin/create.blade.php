@@ -9,10 +9,9 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card px-5">
-                    <h3 class="text-center pt-3">Add new Book</h3>
+                    <h3 class="text-center pt-3">Add New Book</h3>
 
                     <form action="{{ route('books.update', ['book' => $book]) }}" method="POST" class="pb-2" enctype="multipart/form-data">
-                        {{-- @method('PATCH') --}}
                         @csrf
                         
                         <div class="form-group">

@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Auth;
 
 class OnlyAdmin
 {
@@ -17,14 +18,22 @@ class OnlyAdmin
     {
         // return $next($request);
 
+
         if(Auth::check()) {
-            
             if(Auth::user()->isAdmin()) {
                 return $next($request);
             }
         }
 
-        return redirect('/');
+        return redirect('/books');
+        // return response('Not allowed!');
+
+
+        // if (Auth::user() &&  Auth::user()->admin == 1) {
+        //     return $next($request);
+        // }
+
+        // return redirect('/');
 
     }
 }

@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Book extends Model
 {
+    use Searchable;
+    
     protected $guarded = [];
 
     public function users()
@@ -16,5 +19,10 @@ class Book extends Model
     public function reservations()
     {
         return $this->hasMany('App\Reservation');
+    }
+
+    public function searchableAs()
+    {
+        return 'title';
     }
 }

@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Book;
+use App\Reservation;
+use App\User;
+use Illuminate\Support\Facades\DB;
 
 class BooksController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('auth')->except(['index']); // second way of setting middleware
+        // $this->middleware('admin')->except(['index']); // second way of setting middleware
     }
     
     /**
@@ -17,8 +20,10 @@ class BooksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        // dd($request->all());
+        
         $books = Book::all();
 
         return view('index', compact('books'));
@@ -44,6 +49,8 @@ class BooksController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Book::class);
+        
         $book = Book::create($this->validateRequest());
 
         return redirect('/books');
@@ -89,6 +96,8 @@ class BooksController extends Controller
 
         // $data = $this->validateRequest();
         
+        $this->authorize('update', $book);
+        
         $book->update($this->validateRequest());
 
         return redirect('/books');
@@ -102,11 +111,26 @@ class BooksController extends Controller
      */
     public function destroy(Book $book)
     {
+        $this->authorize('delete', $book);
+        
         $book->delete();
 
         return redirect('/books');
+    }
 
-        // dd($book);
+
+    // public function search($searchKey) 
+    // {
+    public function search(Request $request)
+    {
+        $books = Book::search($request->search)->get();
+
+        return view('index', compact('books'));
+
+
+        // $bookResults = Book::search($request->search)->get();
+
+        // return view('index', compact('bookResults'));
     }
 
     private function validateRequest()

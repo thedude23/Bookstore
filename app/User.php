@@ -37,6 +37,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function role()
+    {
+        return $this->belongsTo('App\Role');
+    }
+    
     public function reservations()
     {
         return $this->hasMany('App\Reservation');
@@ -45,5 +50,12 @@ class User extends Authenticatable
     public function books()
     {
         return $this->hasMany('App\Book'); // do we actually need this?
+    }
+
+    public function isAdmin() {
+        if($this->role->name == 'admin') {
+            return true;
+        }
+        return false;
     }
 }
